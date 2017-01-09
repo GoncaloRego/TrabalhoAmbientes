@@ -77,6 +77,12 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetKey(KeyCode.LeftShift))
         {
             Run();
+            isRunning = true;
+        }
+
+        else if(Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isRunning = false;
         }
 
         if(Input.GetKeyDown(KeyCode.Space))
@@ -150,14 +156,23 @@ public class PlayerMovement : MonoBehaviour
 
         if(isRunning == true)
         {
-            animation.SetBool("correr", true);
-            isRunning = false;
+            animation.Play("Run");
         }
 
         else
         {
             animation.SetBool("correr", false);
         }
+
+        /*if (isRunning == true)
+        {
+            animation.SetBool("correr", true);
+        }
+
+        else
+        {
+            animation.SetBool("correr", false);
+        }*/
 
         if(isAttacking == true)
         {
@@ -169,28 +184,6 @@ public class PlayerMovement : MonoBehaviour
         {
             animation.SetBool("atacar", false);
         }
-        /*
-        animation.ResetTrigger("Idle");
-        animation.ResetTrigger("Walk");
-        animation.ResetTrigger("Run");
-        if (isMoving == false && isRunning == false)
-        {
-            animation.SetTrigger("Idle");
-            //animation.Play("Idle");
-        }
-
-        else if(isMoving == true)
-        {
-            animation.SetTrigger("Walk");
-            //animation.Play("Walk");
-        }
-
-        else if(isRunning == true)
-        {
-            animation.SetTrigger("Run");
-            //animation.Play("Run");
-        }
-        */
     }
 
     void Attack()

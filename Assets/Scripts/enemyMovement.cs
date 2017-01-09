@@ -6,8 +6,10 @@ public class enemyMovement : MonoBehaviour
     PlayerMovement player;
     Animator animation;
     private Transform enemyTransform;
+    private Transform target;
     private Rigidbody enemyRigidbody;
     public float speed;
+    public float rotationSpeed;
     float distance;
     public float minDistance;
     public float maxDistance;
@@ -17,6 +19,7 @@ public class enemyMovement : MonoBehaviour
     {
         enemyRigidbody = GetComponent<Rigidbody>();
         enemyTransform = transform;
+        target = GameObject.FindGameObjectWithTag("Player").transform;
 
         animation = GetComponent<Animator>();
 
@@ -26,7 +29,12 @@ public class enemyMovement : MonoBehaviour
 
     void EnemyMove()
     {
-        transform.LookAt(player.playerTransform);
+        enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, Quaternion.LookRotation(target.position - enemyTransform.position),
+            rotationSpeed * Time.deltaTime);
+
+        enemyTransform.position += enemyTransform.forward * speed * Time.deltaTime;
+
+        /*transform.LookAt(player.playerTransform);
         distance = Vector3.Distance(transform.position, player.playerTransform.position);
 
         if (distance >= minDistance)
@@ -39,7 +47,7 @@ public class enemyMovement : MonoBehaviour
         {
             isMoving = false;
             isRunning = true;
-        }
+        }*/
     }
 
     void AnimationControl()
@@ -52,6 +60,16 @@ public class enemyMovement : MonoBehaviour
         else
         {
             animation.SetBool("andar", false);
+        }
+
+        if(isRunning == true)
+        {
+            animation.SetBool("correr", true);
+        }
+
+        else
+        {
+            animation.SetBool("correr", false);
         }
     }
 
