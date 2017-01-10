@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
@@ -6,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody playerRigidBody;
     public Transform playerTransform;
     private Transform target;
+    public Text countText;
+    public Text winningText;
     Animator animation;
     public float jumpSpeed;
     public float speed;
@@ -13,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public float rotationSpeed;
     public float runSpeed;
     public float distance;
+    public int goldCounter;
     bool isMoving;
     bool isRunning;
     bool isAttacking;
@@ -26,6 +30,9 @@ public class PlayerMovement : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody>();
         playerTransform = transform;
 
+        SetCountText();
+        winningText.text = "";
+
         target = GameObject.FindGameObjectWithTag("Enemy").transform;
         distance = Vector3.Distance(playerTransform.position, target.position);
 
@@ -34,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = false;
 
         rotate = Vector3.zero;
+
+        goldCounter = 0;
 	}
 	
     void MovePlayer()
@@ -142,9 +151,34 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider collider)
+    {
+        collider.gameObject.SetActive(false);
+
+        goldCounter++;
+
+        SetCountText();
+        Winning();
+    }
+
+    void SetCountText()
+    {
+        countText.text = "Count: " + goldCounter.ToString() + "/12";
+    }
+
+    void Winning()
+    {
+        if(goldCounter >= 12)
+        {
+            winningText.text = "You Win!";
+        }
+    }
+
 	void Update ()
     {
         MovePlayer();
         animationControl();
+        SetCountText();
+        Winning();
 	}
 }
