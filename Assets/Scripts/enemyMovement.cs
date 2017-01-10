@@ -13,8 +13,8 @@ public class enemyMovement : MonoBehaviour
     float distance;
     public float minDistance;
     public float maxDistance;
-    bool isMoving;
-    bool isRunning;
+    public bool isMoving;
+    public bool isDeath;
 	void Start ()
     {
         enemyRigidbody = GetComponent<Rigidbody>();
@@ -24,7 +24,7 @@ public class enemyMovement : MonoBehaviour
         animation = GetComponent<Animator>();
 
         isMoving = false;
-        isRunning = false;
+        isDeath = false;
 	}
 
     void EnemyMove()
@@ -32,44 +32,40 @@ public class enemyMovement : MonoBehaviour
         enemyTransform.rotation = Quaternion.Slerp(enemyTransform.rotation, Quaternion.LookRotation(target.position - enemyTransform.position),
             rotationSpeed * Time.deltaTime);
 
-        enemyTransform.position += enemyTransform.forward * speed * Time.deltaTime;
+        distance = Vector3.Distance(enemyTransform.position, target.position);
 
-        /*transform.LookAt(player.playerTransform);
-        distance = Vector3.Distance(transform.position, player.playerTransform.position);
-
-        if (distance >= minDistance)
+        if (distance > minDistance && isDeath == false)
         {
-            isMoving = true;
-            transform.position += transform.forward * speed * Time.deltaTime;
+            enemyTransform.position += enemyTransform.forward * speed * Time.deltaTime;
+            isMoving = false;
         }
 
-        if(distance <= maxDistance)
+        else
         {
             isMoving = false;
-            isRunning = true;
-        }*/
+        }
     }
 
     void AnimationControl()
     {
-        if(isMoving == true)
+        if (isDeath == false)
         {
-            animation.SetBool("andar", true);
+            if (isMoving == true)
+            {
+                animation.SetBool("andar", true);
+                isMoving = false;
+            }
+
+            else
+            {
+                animation.SetBool("andar", false);
+            }
         }
 
         else
         {
-            animation.SetBool("andar", false);
-        }
-
-        if(isRunning == true)
-        {
-            animation.SetBool("correr", true);
-        }
-
-        else
-        {
-            animation.SetBool("correr", false);
+            animation.SetBool("morrer", true);
+            isMoving = false;
         }
     }
 

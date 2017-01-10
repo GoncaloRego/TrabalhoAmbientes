@@ -5,12 +5,14 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody playerRigidBody;
     public Transform playerTransform;
+    private Transform target;
     Animator animation;
     public float jumpSpeed;
     public float speed;
     public float gravity;
     public float rotationSpeed;
     public float runSpeed;
+    public float distance;
     bool isMoving;
     bool isRunning;
     bool isAttacking;
@@ -24,6 +26,9 @@ public class PlayerMovement : MonoBehaviour
         playerRigidBody = GetComponent<Rigidbody>();
         playerTransform = transform;
 
+        target = GameObject.FindGameObjectWithTag("Enemy").transform;
+        distance = Vector3.Distance(playerTransform.position, target.position);
+
         isMoving = false;
         isRunning = false;
         isAttacking = false;
@@ -33,9 +38,6 @@ public class PlayerMovement : MonoBehaviour
 	
     void MovePlayer()
     {
-        float moveHorizontal, moveVertical, jump;
-        Vector3 movement = Vector3.zero;
-
         if(Input.GetKey(KeyCode.W))
         {
             playerTransform.Translate(Vector3.forward * speed * Time.deltaTime);
@@ -58,22 +60,6 @@ public class PlayerMovement : MonoBehaviour
             playerTransform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
         }
 
-        /*moveHorizontal = Input.GetAxis("Horizontal");
-        moveVertical = Input.GetAxis("Vertical");
-        jump = Input.GetAxis("Jump");
-        speed = 0.3f;
-
-        //Player Rotation
-        rotate = new Vector3(0.0f, moveHorizontal, 0.0f);
-        playerTransform.Rotate(rotate * rotationSpeed * Time.deltaTime);
-
-        rotate = new Vector3(0.0f, 0.0f, moveVertical);
-        playerTransform.Translate(rotate * speed * Time.deltaTime);
-
-
-        movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
-        playerTransform.position += movement * Time.deltaTime * speed;*/
-
         if(Input.GetKey(KeyCode.LeftShift))
         {
             Run();
@@ -90,7 +76,6 @@ public class PlayerMovement : MonoBehaviour
             isMoving = false;
             isRunning = false;
             isAttacking = true;
-            Attack();
         }
     }
 
@@ -119,26 +104,6 @@ public class PlayerMovement : MonoBehaviour
         {
             playerTransform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
         }
-
-        /*float moveHorizontal, moveVertical, jump, runSpeed = 1f;
-        Vector3 movement;
-
-        moveHorizontal = Input.GetAxis("Horizontal");
-        moveVertical = Input.GetAxis("Vertical");
-        jump = Input.GetAxis("Jump");
-
-        movement = new Vector3(moveHorizontal, jump * jumpSpeed, moveVertical);
-        playerTransform.position += movement * runSpeed * Time.deltaTime;
-
-        if(movement != Vector3.zero)
-        {
-            isRunning = true;
-        }
-
-        else
-        {
-            isRunning = false;
-        }*/
     }
 
     void animationControl()
@@ -147,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
         if (isMoving == true)
         {
             animation.SetBool("andar", true);
+            isMoving = false;
         }
 
         else
@@ -164,16 +130,6 @@ public class PlayerMovement : MonoBehaviour
             animation.SetBool("correr", false);
         }
 
-        /*if (isRunning == true)
-        {
-            animation.SetBool("correr", true);
-        }
-
-        else
-        {
-            animation.SetBool("correr", false);
-        }*/
-
         if(isAttacking == true)
         {
             animation.SetBool("atacar", true);
@@ -184,11 +140,6 @@ public class PlayerMovement : MonoBehaviour
         {
             animation.SetBool("atacar", false);
         }
-    }
-
-    void Attack()
-    {
-        
     }
 
 	void Update ()
