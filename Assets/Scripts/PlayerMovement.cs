@@ -21,10 +21,17 @@ public class PlayerMovement : MonoBehaviour
     bool isRunning;
     bool isAttacking;
     Vector3 rotate;
+    GameObject[] enemy;
+    NewEnemyMov enemyMov;
 
+    public AudioSource sound;
+    //public AudioClip audio;
+    
 
     void Start ()
     {
+        
+
         animation = GetComponent<Animator>();
 
         playerRigidBody = GetComponent<Rigidbody>();
@@ -32,8 +39,9 @@ public class PlayerMovement : MonoBehaviour
 
         SetCountText();
         winningText.text = "";
-
+        
         target = GameObject.FindGameObjectWithTag("Enemy").transform;
+
         distance = Vector3.Distance(playerTransform.position, target.position);
 
         isMoving = false;
@@ -142,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
         if(isAttacking == true)
         {
             animation.SetBool("atacar", true);
+           
             isAttacking = false;
         }
 
@@ -153,12 +162,18 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
+
+        //sound = GetComponent<AudioSource>();
+       
+
         collider.gameObject.SetActive(false);
 
         goldCounter++;
 
         SetCountText();
         Winning();
+
+        sound.Play();
     }
 
     void SetCountText()
