@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\MoveMotionPack\SampleScene\Scripts\PlayManager.cs" />
+     <Compile Include="Assets\Scripts\EnemySpwan.cs" />
+     <Compile Include="Assets\Scripts\NewEnemyMov.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\enemyMovement.cs" />
      <None Include="Assets\MoveMotionPack\SampleScene\Shaders\ReflectiveDiffuseSpecTransp.shader" />
