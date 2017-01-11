@@ -24,9 +24,13 @@ public class PlayerMovement : MonoBehaviour
     GameObject[] enemy;
     NewEnemyMov enemyMov;
 
+    float time;
+
     public AudioSource sound;
+
+    public AudioSource OlafSound;
     //public AudioClip audio;
-    
+
 
     void Start ()
     {
@@ -174,6 +178,8 @@ public class PlayerMovement : MonoBehaviour
         Winning();
 
         sound.Play();
+
+    
     }
 
     void SetCountText()
@@ -186,6 +192,7 @@ public class PlayerMovement : MonoBehaviour
         if(goldCounter >= 12)
         {
             winningText.text = "You Win!";
+            OlafSound.Play();
         }
     }
 
@@ -195,5 +202,7 @@ public class PlayerMovement : MonoBehaviour
         animationControl();
         SetCountText();
         Winning();
+
+        
 	}
 }
